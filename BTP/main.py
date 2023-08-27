@@ -25,7 +25,7 @@ def get_disease_info():
     conn = sqlite3.connect('Diseases.db')
     c = conn.cursor()
     
-    c.execute('SELECT * FROM diseases WHERE name = ?', (disease_name,))
+    c.execute('SELECT * FROM diseases WHERE disease_name = ?', (disease_name,))
     disease_info = c.fetchone()
     
     conn.close()
@@ -33,7 +33,10 @@ def get_disease_info():
     if disease_info:
         response = {
             'name': disease_info[1],
-            'description': disease_info[2]
+            'reason': disease_info[2],
+            'measures': disease_info[3],
+            'suggestions': disease_info[5]
+            
         }
         return jsonify(response)
     else:
@@ -65,6 +68,23 @@ def predict_disease():
     predicted_class_label = class_labels[predicted_class_index]
 
     return jsonify({'predicted_class': predicted_class_label})  
+
+
+
+@app.route('/get_all', methods=['GET'])
+def get_all_disease():
+    conn = sqlite3.connect('Diseases.db')
+    c = conn.cursor()
+    
+    c.execute('SELECT * FROM diseases')
+    disease_info = c.fetchall()
+    
+    conn.close()
+ 
+    return jsonify(disease_info)
+
+   
+        
 
 if __name__ == '__main__':
     app.run(debug=True)
