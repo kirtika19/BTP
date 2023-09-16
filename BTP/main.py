@@ -2,20 +2,19 @@ from flask import Flask, request, jsonify
 import sqlite3
 import numpy as np
 import tensorflow as tf
-from modelintegration import load_model, predict
+#from modelintegration import load_model, predict
 
 app = Flask(__name__)
 
 # Load the SQLite database and TFLite model when the app starts
 conn = sqlite3.connect('Diseases.db')
-model_path = 'C:/Users/Dedeepya/Downloads/model.tflite'
-interpreter = tf.lite.Interpreter(model_path='C:/Users/Dedeepya/Downloads/model.tflite')
+model_path = 'C:/Users/Dedeepya/Downloads/output.tflite'
+interpreter = tf.lite.Interpreter(model_path='C:/Users/Dedeepya/Downloads/output.tflite')
 interpreter.allocate_tensors()
 
 input_details = interpreter.get_input_details()
 output_details = interpreter.get_output_details()
-
-class_labels = ["Early_Blight," ,"Healthy", "Late_Blight"]
+class_labels = ['Early_Blight' ,'Healthy', 'Late_Blight']
 
 
 @app.route('/get_info', methods=['GET'])
